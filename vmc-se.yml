@@ -231,8 +231,8 @@
           AVICNTRL: '{{ cluster_ip }}'
           AVICNTRL_AUTHTOKEN: '{{ auth_token }}'
           AVICNTRL_CLUSTERUUID: '{{ cluster_uuid }}'
-          avi.mgmt_ip.SE: "{{ se_mgmt_ip | default(omit) }}"
-          avi.mgmt_mask.SE: "{{ se_mgmt_mask | default(omit) }}"
+          avi.mgmt-ip.SE: "{{ se_mgmt_ip | default(omit) }}"
+          avi.mgmt-mask.SE: "{{ se_mgmt_mask | default(omit) }}"
           avi.default-gw.SE: "{{ se_mgmt_gw| default(omit) }}"
         power_on: no
         ova: "{{ ova_path }}"
@@ -361,10 +361,6 @@
       when: "'hw_eth' in item.key and 'nsx.LogicalSwitch' in item.value.summary and item.value.ipaddresses == []"
       with_dict: "{{ vm_info.instance }}"
 
-    - debug:
-        msg:  
-        - "{{ vm_mac_addresses }}"
-        - "{{ se_mac_addresses }}"
 
 
     - name: Map SE eth interfaces to VM interfaces by comparing mac addresses
@@ -372,10 +368,6 @@
         mac_mapping: "{{ mac_mapping | combine( { se_mac_addresses[item.key]: item.value } ) }}"
       with_dict: "{{ vm_mac_addresses }}"
 
-
-
-    - debug:
-        msg:  "{{ mac_mapping }}"
 
   
     - set_fact:
@@ -395,6 +387,10 @@
           vnic_list: "{{ vnic_list + [ item|combine({'vnic_networks':[{'ip':{'mask': vars[mac_mapping[item.linux_name]]['se_int_mask'],'ip_addr': {'type': 'V4', 'addr': vars[mac_mapping[item.linux_name]]['se_int_ip']}},'ctlr_alloc': False,'mode': 'STATIC'}]})] }}"
       with_items: "{{ se_vnics }}"  
       when: "item.linux_name in mac_mapping
+            and
+            vars[mac_mapping[item.linux_name]]['se_int_pg'] is defined
+            and
+            vars[mac_mapping[item.linux_name]]['se_int_pg'] != None
             and 
             vars[mac_mapping[item.linux_name]]['se_int_ip'] is defined
             and
@@ -413,7 +409,11 @@
           new_item: "{ 'dhcp_enabled': 'true' }"
       with_items: "{{ se_vnics }}"  
       when: "item.linux_name in mac_mapping
-            and 
+            and
+            vars[mac_mapping[item.linux_name]]['se_int_pg'] is defined
+            and
+            vars[mac_mapping[item.linux_name]]['se_int_pg'] != None
+            and
             (vars[mac_mapping[item.linux_name]]['se_int_ip'] is undefined
             or 
             vars[mac_mapping[item.linux_name]]['se_int_ip']==None)"
@@ -423,6 +423,7 @@
          vnic_list: "{{ vnic_list + [ item ] }}"
       with_items: "{{ se_vnics }}"
       when: item.linux_name not in mac_mapping 
+
 
 
 

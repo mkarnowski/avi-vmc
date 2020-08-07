@@ -47,8 +47,8 @@
         networks: 
           Management: "{{ management_network_pg | default('VM Network',true) }}"
         properties: 
-          avi.mgmt_ip.CONTROLLER: "{{ node1_mgmt_ip | default(omit) }}"
-          avi.mgmt_mask.CONTROLLER: "{{ node1_mgmt_mask | default(omit) }}"
+          avi.mgmt-ip.CONTROLLER: "{{ node1_mgmt_ip | default(omit) }}"
+          avi.mgmt-mask.CONTROLLER: "{{ node1_mgmt_mask | default(omit) }}"
           avi.default-gw.CONTROLLER: "{{ node1_gw| default(omit) }}"          
           avi.sysadmin-public-key.CONTROLLER: '{{ pub_key }}'
         power_on: no       
@@ -92,8 +92,8 @@
         networks: 
           Management: "{{ management_network_pg | default('VM Network',true) }}"
         properties: 
-          avi.mgmt_ip.CONTROLLER: "{{ node2_mgmt_ip | default(omit) }}"
-          avi.mgmt_mask.CONTROLLER: "{{ node2_mgmt_mask | default(omit) }}"
+          avi.mgmt-ip.CONTROLLER: "{{ node2_mgmt_ip | default(omit) }}"
+          avi.mgmt-mask.CONTROLLER: "{{ node2_mgmt_mask | default(omit) }}"
           avi.default-gw.CONTROLLER: "{{ node2_gw| default(omit) }}"
         power_on: no        
         ova: "{{ ova_path }}"
@@ -167,8 +167,8 @@
         networks: 
           Management: "{{ management_network_pg | default('VM Network',true) }}"
         properties: 
-          avi.mgmt_ip.CONTROLLER: "{{ node3_mgmt_ip | default(omit) }}"
-          avi.mgmt_mask.CONTROLLER: "{{ node3_mgmt_mask | default(omit) }}"
+          avi.mgmt-ip.CONTROLLER: "{{ node3_mgmt_ip | default(omit) }}"
+          avi.mgmt-mask.CONTROLLER: "{{ node3_mgmt_mask | default(omit) }}"
           avi.default-gw.CONTROLLER: "{{ node3_gw| default(omit) }}"
         power_on: no        
         ova: "{{ ova_path }}"

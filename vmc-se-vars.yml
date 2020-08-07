@@ -7,7 +7,7 @@ avi_password:
 #----- Avi controller optional information
 tenant:
 cloud:
-
+se_group:
 
 
 #-------------------VMC vCenter-----------------------------
@@ -29,6 +29,7 @@ folder:
 #-------------------Avi SE-----------------------------
 #---- Avi SE required information
 management_network_pg: 
+data_nic_parking_pg: 
 
 #---- Avi SE mgmt IP information
 #---- If blank, DHCP 
@@ -41,7 +42,7 @@ se_mgmt_gw:
 #---- Avi SE optional information
 ova_path: 
 
-segroup:
+
 
 se_memory_mb: 4096
 se_memory_reserve_lock: False
