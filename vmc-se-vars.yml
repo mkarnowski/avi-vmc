@@ -7,7 +7,7 @@ avi_password:
 #----- Avi controller optional information
 tenant:
 cloud:
-se_group:
+segroup:
 
 
 #-------------------VMC vCenter-----------------------------
