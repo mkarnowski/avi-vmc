@@ -29,7 +29,7 @@ $ yum install sshpass -y
 --------------
 ## Usage
 --------------
-Each playbook has a corresponding variable file that requires user inputted data to successfully complete.  The variable files for each playbook denote whether specific variables are required are optional.  If a required variable if overlooked the playbook will fail to complete successfully.
+Each playbook has a corresponding variable file that requires user inputted data to successfully complete.  The variable files for each playbook denote whether specific variables are required are optional.  If a required variable is overlooked the playbook will fail to complete successfully.
 
 
 --------------
@@ -40,7 +40,7 @@ Playbook:  vmc-ctl.yml
 Variables: vmc-ctl-vars.yml
 ```
 
-This playbook will deploy an Avi Controller cluster within the VMC compute domain, setting the admin password, and creating the 3-node cluster is desired (recommended.)
+This playbook will deploy an Avi Controller cluster within the VMC compute domain; setting the admin password, and creating the 3-node cluster is desired (recommended.)
 
 <br></br>
 
@@ -117,7 +117,7 @@ This playbook will deploy an Avi Controller cluster within the VMC compute domai
 
 <tr>
 <td >
-<b>datastore</b><br><div style="font-size: small">string / required
+<b>datastore</b><br><div style="font-size: small">string
 <div style="font-size: small">
 </div>
 </td>
@@ -136,7 +136,7 @@ This playbook will deploy an Avi Controller cluster within the VMC compute domai
 </td>
 <td><b></b><br><divstyle="font-size: small"><strong>Default:</strong> the Datacenter VM root</td>
 <td>
-<div>The vCenter VM folder for the Avi Controller VMs.  EX:  &ltdatacenter&gt/vm/avi</div>
+<div>The vCenter VM folder for the Avi Controller VMs.  EX:  SDDC-Datacenter/vm/avi</div>
 </td>
 </tr>
 
@@ -161,7 +161,7 @@ This playbook will deploy an Avi Controller cluster within the VMC compute domai
 </td>
 <td><b></b><br><div style="font-size: small"></td>
 <td>
-<div>The network portgroup to place the Avi Controller vNICs into</div>
+<div>The network portgroup name to place the Avi Controller vNICs into</div>
 </td>
 </tr>
 
@@ -551,7 +551,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 </td>
 <td><b></b><br><div style="font-size: small"></td>
 <td>
-<div>The network portgroup to place the Avi service engine management vNIC into</div>
+<div>The network portgroup name to place the Avi service engine management vNIC into</div>
 </td>
 </tr>
 
@@ -564,7 +564,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 </td>
 <td><b></b><br><div style="font-size: small"></td>
 <td>
-<div>The network portgroup to place unused Avi service engine data vNIC(s) into</div>
+<div>The network portgroup name to place unused Avi service engine data vNIC(s) into</div>
 </td>
 </tr>
 
@@ -706,7 +706,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 1, leave blank for unused</div>
+<div>Port group name to use for SE data nic 1, leave blank for unused</div>
 </td>
 </tr>
 
@@ -785,7 +785,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 2, leave blank for unused</div>
+<div>Port group name to use for SE data nic 2, leave blank for unused</div>
 </td>
 </tr>
 
@@ -864,7 +864,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 3, leave blank for unused</div>
+<div>Port group name to use for SE data nic 3, leave blank for unused</div>
 </td>
 </tr>
 
@@ -944,7 +944,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 4, leave blank for unused</div>
+<div>Port group name to use for SE data nic 4, leave blank for unused</div>
 </td>
 </tr>
 
@@ -1023,7 +1023,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 5, leave blank for unused</div>
+<div>Port group name to use for SE data nic 5, leave blank for unused</div>
 </td>
 </tr>
 
@@ -1102,7 +1102,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 6, leave blank for unused</div>
+<div>Port group name to use for SE data nic 6, leave blank for unused</div>
 </td>
 </tr>
 
@@ -1182,7 +1182,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 7, leave blank for unused</div>
+<div>Port group name to use for SE data nic 7, leave blank for unused</div>
 </td>
 </tr>
 
@@ -1264,7 +1264,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 8, leave blank for unused</div>
+<div>Port group name to use for SE data nic 8, leave blank for unused</div>
 </td>
 </tr>
 
@@ -1343,7 +1343,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 <td>
 </td>
 <td>
-<div>Port group to use for SE data nic 9, leave blank for unused</div>
+<div>Port group name to use for SE data nic 9, leave blank for unused</div>
 </td>
 </tr>
 
