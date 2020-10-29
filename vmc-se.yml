@@ -382,6 +382,7 @@
     - set_fact:
         se_vnics: "{{ api_results.obj.results[0].data_vnics }}"
         vnic_list: []
+        connected_vnics: []
 
 
     #- debug:
@@ -396,6 +397,7 @@
     - name: Prepare config - Configure Static IPs for SE interfaces
       set_fact:
           vnic_list: "{{ vnic_list + [ item|combine({'vnic_networks':[{'ip':{'mask': vars[mac_mapping[item.linux_name]]['se_int_mask'],'ip_addr': {'type': 'V4', 'addr': vars[mac_mapping[item.linux_name]]['se_int_ip']}},'ctlr_alloc': False,'mode': 'STATIC'}]})] }}"
+          connected_vnics: "{{ connected_vnics + [ item.mac_address ] }}"
       with_items: "{{ se_vnics }}"  
       when: "item.linux_name in mac_mapping
             and
@@ -418,6 +420,7 @@
     - name: Prepare config - Enable DHCP on SE interfaces
       set_fact:
          vnic_list: "{{ vnic_list + [ item|combine({'dhcp_enabled': True}) ] }}"
+         connected_vnics: "{{ connected_vnics + [ item.mac_address ] }}"
       vars:
           new_item: "{ 'dhcp_enabled': 'true' }"
       with_items: "{{ se_vnics }}"  
@@ -467,6 +470,39 @@
 
 
 
+    - set_fact:
+        vm_guest_vnics: "{{ vm_guest_vnics|default([]) + [{'mac': item, 'connected': true, 'start_connected': true, 'state': 'present' }] }}"
+      with_items: "{{ connected_vnics }}"
+
+
+    #- name: Connect SE VNICs 
+    #  vmware_guest_network:
+    #    hostname: '{{ vcenter_hostname }}'
+    #    username: '{{ vcenter_username }}'
+    #    password: '{{ vcenter_password }}'
+    #    validate_certs: False
+    #    uuid: "{{ sevm_uuid }}"
+    #    networks:
+    #      - mac: "{{ item }}"
+    #        connected: yes
+    #        start_connected: yes
+    #        state: present
+    #  with_items: "{{ connected_vnics }}"
+    #  delegate_to: "localhost"
+
+
+    - name: Connect SE VNICs 
+      vmware_guest_network:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: False
+        uuid: "{{ sevm_uuid }}"
+        networks: "{{ vm_guest_vnics }}"
+      delegate_to: "localhost"
+
+
+
     - name: Apply Interface configurations on Service Engine and modify SE Group
       avi_serviceengine:
         avi_api_update_method: patch
@@ -480,3 +516,5 @@
         se_group_ref: "/api/serviceenginegroup/{{ seg_uuid }}"
       delegate_to: "localhost"
         
+
+
