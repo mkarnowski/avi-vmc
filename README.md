@@ -61,7 +61,7 @@ This playbook will deploy an Avi Controller cluster within the VMC compute domai
 </td>
 <td><b></b><br><div style="font-size: small"></td>
 <td>
-<div>IP or fqdn of VCF mgmt vCenter server used to deploy Avi Controller(s)</div>
+<div>IP or fqdn of VMC mgmt vCenter server used to deploy Avi Controller(s)</div>
 </td>
 </tr>
 
@@ -463,7 +463,7 @@ This playbook will deploy Avi Service Engines within the VMC Compute  Domain.
 </td>
 <td><b></b><br><div style="font-size: small"></td>
 <td>
-<div>IP or fqdn of VCF compute vCenter server used to deploy Avi Service Engine</div>
+<div>IP or fqdn of VMC compute vCenter server used to deploy Avi Service Engine</div>
 </td>
 </tr>
 
