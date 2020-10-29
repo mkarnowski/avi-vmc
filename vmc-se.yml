@@ -37,7 +37,7 @@
       - name: Avi SE | Image deploy | Set SE image path for controller version < 18.2.6
         set_fact:
           se_image_path: "/opt/avi/se_ova"
-        when: se_master_ctl_version < "18.2.6"
+        when: se_master_ctl_version is version("18.2.6", "<")
         
   
   
@@ -59,7 +59,7 @@
             set_fact:
               se_image_path: "/host/pkgs/{{ data_res.obj.version.Tag }}"
   
-        when: se_master_ctl_version >= "18.2.6"
+        when: se_master_ctl_version is version("18.2.6", ">=")
 
       when: 'ova_path is not defined or ova_path == None'
     
@@ -218,15 +218,15 @@
         validate_certs: False
         networks: 
           Management: "{{ management_network_pg | default('VM Network',true) }}"
-          Data Network 1: "{{ data_network1.se_int_pg | default('VM Network',true) }}"
-          Data Network 2: "{{ data_network2.se_int_pg | default('VM Network',true) }}"
-          Data Network 3: "{{ data_network3.se_int_pg | default('VM Network',true) }}"
-          Data Network 4: "{{ data_network4.se_int_pg | default('VM Network',true) }}"
-          Data Network 5: "{{ data_network5.se_int_pg | default('VM Network',true) }}"
-          Data Network 6: "{{ data_network6.se_int_pg | default('VM Network',true) }}"
-          Data Network 7: "{{ data_network7.se_int_pg | default('VM Network',true) }}"
-          Data Network 8: "{{ data_network8.se_int_pg | default('VM Network',true) }}"
-          Data Network 9: "{{ data_network9.se_int_pg | default('VM Network',true) }}"
+          Data Network 1: "{{ data_network1.se_int_pg | default(data_nic_parking_pg,true) }}"
+          Data Network 2: "{{ data_network2.se_int_pg | default(data_nic_parking_pg,true) }}"
+          Data Network 3: "{{ data_network3.se_int_pg | default(data_nic_parking_pg,true) }}"
+          Data Network 4: "{{ data_network4.se_int_pg | default(data_nic_parking_pg,true) }}"
+          Data Network 5: "{{ data_network5.se_int_pg | default(data_nic_parking_pg,true) }}"
+          Data Network 6: "{{ data_network6.se_int_pg | default(data_nic_parking_pg,true) }}"
+          Data Network 7: "{{ data_network7.se_int_pg | default(data_nic_parking_pg,true) }}"
+          Data Network 8: "{{ data_network8.se_int_pg | default(data_nic_parking_pg,true) }}"
+          Data Network 9: "{{ data_network9.se_int_pg | default(data_nic_parking_pg,true) }}"
         properties: 
           AVICNTRL: '{{ cluster_ip }}'
           AVICNTRL_AUTHTOKEN: '{{ auth_token }}'
@@ -243,6 +243,11 @@
     - set_fact:
         sevm_uuid: "{{ se_status.instance.hw_product_uuid }}"
       when:  "se_status is defined and 'instance' in se_status"
+
+  
+    - set_fact:
+        sevm_uuid: "{{ se_status.hw_product_uuid }}"
+      when:  "se_status is defined and 'hw_product_uuid' in se_status"
 
 
     - debug:
@@ -356,17 +361,21 @@
 
 
     - set_fact:
-        #vm_mac_addresses: "{{ vm_mac_addresses | combine( { item.value.macaddress: item.value.label.replace('Network adapter ','data_network')} ) }}"
-        vm_mac_addresses: "{{ vm_mac_addresses | combine( { item.value.macaddress: item.key.replace('hw_eth ','data_network')} ) }}"
+        vm_mac_addresses: "{{ vm_mac_addresses | combine( { item.value.macaddress: item.key.replace('hw_eth','data_network')} ) }}"
       when: "'hw_eth' in item.key and 'nsx.LogicalSwitch' in item.value.summary and item.value.ipaddresses == []"
       with_dict: "{{ vm_info.instance }}"
 
+    #- debug:
+    #    msg:  
+    #    - "{{ vm_mac_addresses }}"
+    #    - "{{ se_mac_addresses }}"
 
 
     - name: Map SE eth interfaces to VM interfaces by comparing mac addresses
       set_fact:
         mac_mapping: "{{ mac_mapping | combine( { se_mac_addresses[item.key]: item.value } ) }}"
       with_dict: "{{ vm_mac_addresses }}"
+
 
 
   
@@ -379,6 +388,8 @@
     #    msg:
     #      - "{{ mac_mapping }}"
     #      - "{{ se_vnics }}"
+
+
 
 
 
@@ -401,6 +412,8 @@
             vars[mac_mapping[item.linux_name]]['se_int_mask'] != None"
 
 
+    #- debug:
+    #     msg: "{{ vnic_list }}"
 
     - name: Prepare config - Enable DHCP on SE interfaces
       set_fact:
@@ -423,8 +436,6 @@
          vnic_list: "{{ vnic_list + [ item ] }}"
       with_items: "{{ se_vnics }}"
       when: item.linux_name not in mac_mapping 
-
-
 
 
     
@@ -469,4 +480,3 @@
         se_group_ref: "/api/serviceenginegroup/{{ seg_uuid }}"
       delegate_to: "localhost"
         
-
