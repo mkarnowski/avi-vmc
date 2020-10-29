@@ -475,21 +475,6 @@
       with_items: "{{ connected_vnics }}"
 
 
-    #- name: Connect SE VNICs 
-    #  vmware_guest_network:
-    #    hostname: '{{ vcenter_hostname }}'
-    #    username: '{{ vcenter_username }}'
-    #    password: '{{ vcenter_password }}'
-    #    validate_certs: False
-    #    uuid: "{{ sevm_uuid }}"
-    #    networks:
-    #      - mac: "{{ item }}"
-    #        connected: yes
-    #        start_connected: yes
-    #        state: present
-    #  with_items: "{{ connected_vnics }}"
-    #  delegate_to: "localhost"
-
 
     - name: Connect SE VNICs 
       vmware_guest_network:
